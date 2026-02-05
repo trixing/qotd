@@ -3,6 +3,7 @@ from ha_mqtt_discoverable.sensors import Text, TextInfo, Button, ButtonInfo
 from paho.mqtt.client import Client, MQTTMessage
 import csv
 import logging
+import os
 import random
 import sys
 import time
@@ -13,28 +14,38 @@ logging.basicConfig(stream=sys.stderr, level=logging.INFO)
 class QuoteOfTheDayService:
     """MQTT service for publishing a quote of the day."""
 
-    def __init__(self, mqtt_host: str = "172.17.0.1", quotes_file: str = "quotes_short.csv"):
+    def __init__(
+        self,
+        mqtt_host: str = None,
+        mqtt_prefix: str = None,
+        entity_prefix: str = None,
+        quotes_file: str = "quotes_short.csv"
+    ):
         """Initialize the QOTD service.
         
         Args:
-            mqtt_host: MQTT broker host address
+            mqtt_host: MQTT broker host address. Defaults to MQTT_HOST env var or "172.17.0.1"
+            mqtt_prefix: MQTT prefix for entity discovery. Defaults to MQTT_PREFIX env var or "homeassistant"
+            entity_prefix: Prefix for entity object_id, unique_id, and identifiers. Defaults to ENTITY_PREFIX env var or "qotd"
             quotes_file: Path to CSV file containing quotes
         """
-        self.mqtt_host = mqtt_host
+        self.mqtt_host = mqtt_host or os.getenv("MQTT_HOST", "172.17.0.1")
+        self.mqtt_prefix = mqtt_prefix or os.getenv("MQTT_PREFIX", "homeassistant")
+        self.entity_prefix = entity_prefix or os.getenv("ENTITY_PREFIX", "qotd")
         self.quotes_file = quotes_file
         self.quotes = []
         
         # Configure MQTT and device settings
         self.mqtt_settings = Settings.MQTT(
-            host=mqtt_host,
-            mqtt_prefix="homeassistant"
+            host=self.mqtt_host,
+            mqtt_prefix=self.mqtt_prefix
         )
         
         self.device_info = DeviceInfo(
             name="qotd",
             model="Custom",
             manufacturer="github.com/trixing",
-            identifiers="qotd_id"
+            identifiers=f"{self.entity_prefix}_id"
         )
         
         # Initialize MQTT entities
@@ -53,32 +64,32 @@ class QuoteOfTheDayService:
         """Initialize all MQTT text and button entities."""
         quote_info = TextInfo(
             name="Quote",
-            object_id="qotd_quote",
-            unique_id="qotd_quote_id",
+            object_id=f"{self.entity_prefix}_quote",
+            unique_id=f"{self.entity_prefix}_quote_id",
             device=self.device_info
         )
         author_info = TextInfo(
             name="Author",
-            object_id="qotd_author",
-            unique_id="qotd_author_id",
+            object_id=f"{self.entity_prefix}_author",
+            unique_id=f"{self.entity_prefix}_author_id",
             device=self.device_info
         )
         tags_info = TextInfo(
             name="Tags",
-            object_id="qotd_tags",
-            unique_id="qotd_tags_id",
+            object_id=f"{self.entity_prefix}_tags",
+            unique_id=f"{self.entity_prefix}_tags_id",
             device=self.device_info
         )
         vestaboard_info = TextInfo(
             name="Vestaboard Quote Fit",
-            object_id="qotd_vestaboard_fit",
-            unique_id="qotd_vestaboard_fit_id",
+            object_id=f"{self.entity_prefix}_vestaboard_fit",
+            unique_id=f"{self.entity_prefix}_vestaboard_fit_id",
             device=self.device_info
         )
         btn_info = ButtonInfo(
             name="Regenerate",
-            object_id="qotd_regen",
-            unique_id="qotd_regen_id",
+            object_id=f"{self.entity_prefix}_regen",
+            unique_id=f"{self.entity_prefix}_regen_id",
             device=self.device_info
         )
         
