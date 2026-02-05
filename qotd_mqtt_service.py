@@ -20,9 +20,9 @@ device_info = DeviceInfo(
         manufacturer="github.com/trixing",
         identifiers="qotd_id")
 
-quote_info = TextInfo(name="Quote", object_id="quote", unique_id="qotd_text_id", device=device_info)
-author_info = TextInfo(name="Author", object_id="author", unique_id="qotd_author_id", device=device_info)
-btn_info = ButtonInfo(name="Regenerate", object_id="regen", unique_id="qotd_regen_id", device=device_info)
+quote_info = TextInfo(name="Quote", object_id="qotd_quote", unique_id="qotd_text_id", device=device_info)
+author_info = TextInfo(name="Author", object_id="qotd_author", unique_id="qotd_author_id", device=device_info)
+btn_info = ButtonInfo(name="Regenerate", object_id="qotd_regen", unique_id="qotd_regen_id", device=device_info)
 
 quote_settings = Settings(mqtt=mqtt_settings, entity=quote_info)
 btn_settings = Settings(mqtt=mqtt_settings, entity=btn_info)
