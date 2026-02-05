@@ -1,1 +1,1 @@
-ha-mqtt-discoverable
+ha-mqtt-discoverable==0.23.0
