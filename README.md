@@ -1,21 +1,39 @@
-## Dataset
+# Overview
+
+A simple mqtt service for HomeAssistant which is able to pick and publish
+a random quote. This is useful to display on a dashboard.
+
+It has special mode to format the quote to fit on half of a Vestaboard.
+
+The dimensions of the fit are currently hardcoded and need to be modified
+in `qotd_filter.py`.
+
+# Development and Build Instructions
+
+## Get the Dataset
 Kaggle Quotes 500k
 https://www.kaggle.com/datasets/manann/quotes-500k?resource=download
 
+## Filter the Dataset
+`python3 qotd_filter.py`
+
 ## Build
-docker build -t trixing/qotd .
+`docker build -t trixing/qotd .`
 
 ## Run
-docker run --name trixing_qotd --restart=always --detach trixing/qotd
+`docker run --name trixing_qotd --restart=always --detach trixing/qotd`
 
 ## Debug
-docker run -it -e MQTT_PREFIX=development -v $PWD:/usr/src/app  trixing/qotd
+`docker run -it -e MQTT_PREFIX=development -v $PWD:/usr/src/app  trixing/qotd`
 
 ## Develop
+
+```
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
 python3 qotd_mqtt_service.py
+```
 
 ### Environment Variables
 Configure the service using environment variables:
