@@ -83,12 +83,12 @@ def btn_callback(client: Client, user_data, message: MQTTMessage):
 # Define an optional object to be passed back to the callback
 user_data = {}
 
-my_button = Button(btn_settings, btn_callback, user_data)
+my_button = Button(btn_settings, btn_callback)
 # Instantiate the text
-my_quote = Text(quote_settings, quote_callback, user_data)
-my_author = Text(author_settings, quote_callback, user_data)
-my_vestaboard = Text(vestaboard_settings, quote_callback, user_data)
-my_tags = Text(tags_settings, quote_callback, user_data)
+my_quote = Text(quote_settings, quote_callback)
+my_author = Text(author_settings, quote_callback)
+my_vestaboard = Text(vestaboard_settings, quote_callback)
+my_tags = Text(tags_settings, quote_callback)
 # Set the initial text displayed in HA UI, publishing an MQTT message that gets picked up by HA
 regenerate()
 
