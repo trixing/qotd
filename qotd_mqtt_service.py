@@ -8,7 +8,6 @@ import random
 import sys
 import time
 
-logging.basicConfig(stream=sys.stderr, level=logging.INFO)
 
 
 class QuoteOfTheDayService:
@@ -119,10 +118,10 @@ class QuoteOfTheDayService:
         quote_text, author_text, tags_text, vestaboard_fit = random.choice(self.quotes)
         logging.info(f"New quote: {quote_text} by {author_text}")
         
-        self.quote.set_text(quote_text)
-        self.author.set_text(author_text)
-        self.tags.set_text(tags_text)
-        self.vestaboard.set_text(vestaboard_fit)
+        self.quote.set_text(quote_text[:255])
+        self.author.set_text(author_text[:255])
+        self.tags.set_text(tags_text[:255])
+        self.vestaboard.set_text(vestaboard_fit[:255])
     
     def _quote_callback(self, client: Client, user_data, message: MQTTMessage):
         """Handle incoming quote messages from HA."""
@@ -145,5 +144,10 @@ class QuoteOfTheDayService:
 
 
 if __name__ == "__main__":
+
+    logging.basicConfig(
+        stream=sys.stderr, level=logging.INFO,
+        format= '[%(asctime)s] {%(pathname)s:%(lineno)d} %(levelname)s - %(message)s')
+
     service = QuoteOfTheDayService()
     service.run()
