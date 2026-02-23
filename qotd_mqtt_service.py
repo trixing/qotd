@@ -147,7 +147,7 @@ if __name__ == "__main__":
 
     logging.basicConfig(
         stream=sys.stderr, level=logging.INFO,
-        format= '[%(asctime)s] {%(pathname)s:%(lineno)d} %(levelname)s - %(message)s')
+        format= '[%(asctime)s] %(levelname)s - %(message)s')
 
     service = QuoteOfTheDayService()
     service.run()
